@@ -54,3 +54,17 @@ export const completeTodo = async (id: string): Promise<ITask> => {
   const updatedTodo = await res.json();
   return updatedTodo;
 }
+
+export const uncompleteTodo = async (id: string): Promise<ITask> => {
+  const res = await fetch(`${baseUrl}/tasks/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      done: false
+    })
+  })
+  const updatedTodo = await res.json();
+  return updatedTodo;
+}
