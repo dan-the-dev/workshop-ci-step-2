@@ -2,10 +2,10 @@
 
 import { ITask } from "@/types/tasks";
 import { FormEventHandler, useState } from "react";
-import { FiCheckCircle, FiEdit, FiTrash2 } from "react-icons/fi";
+import { FiCheckCircle, FiCircle, FiEdit, FiTrash2 } from "react-icons/fi";
 import Modal from "./Modal";
 import { useRouter } from "next/navigation";
-import { completeTodo, deleteTodo, editTodo } from "@/api";
+import { completeTodo, deleteTodo, editTodo, uncompleteTodo } from "@/api";
 import UpsertTaskModal from "./UpsertTaskModal";
 
 interface TaskProps {
@@ -17,6 +17,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
   const [openModalDeleted, setOpenModalDeleted] = useState<boolean>(false);
   const [openModalComplete, setOpenModalComplete] = useState<boolean>(false);
+  const [openModalUncomplete, setOpenModalUncomplete] = useState<boolean>(false);
   const [taskToEdit, setTaskToEdit] = useState<string>(task.text ?? '');
 
   const handleSubmitEditTodo: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -41,11 +42,17 @@ const Task: React.FC<TaskProps> = ({ task }) => {
     router.refresh();
   };
 
+  const handleUncompleteTask = async (id: string) => {
+    await uncompleteTodo(id);
+    setOpenModalUncomplete(false);
+    router.refresh();
+  };
+
   return (
-    <tr key={task.id} className={task.done ? 'line-through text-green-200 font-bold' : ''}>
-      <td className='w-full' data-testid="todo-name-label">{task.text}</td>
+    <tr key={task.id}>
+      <td className={task.done ? 'line-through text-green-200 font-bold w-full' : 'w-full'} data-testid="todo-name-label">{task.text}</td>
       {!task.done && <td className='flex gap-5'>
-        <FiCheckCircle
+        <FiCircle
           onClick={() => setOpenModalComplete(true)}
           cursor='pointer'
           className='text-green-500'
@@ -90,6 +97,25 @@ const Task: React.FC<TaskProps> = ({ task }) => {
           </h3>
           <div className='modal-action'>
             <button onClick={() => handleDeleteTask(task.id)} className='btn' data-testid='delete-todo-confirm'>
+              Yes
+            </button>
+          </div>
+        </Modal>
+      </td>}
+      {task.done && <td className='flex gap-5'>
+        <FiCheckCircle
+          onClick={() => setOpenModalUncomplete(true)}
+          cursor='pointer'
+          className='text-green-500'
+          size={25}
+          data-testid="complete-todo"
+        />
+        <Modal modalOpen={openModalUncomplete} setModalOpen={setOpenModalUncomplete}>
+          <h3 className='text-lg'>
+            Are you sure you want to restore this task?
+          </h3>
+          <div className='modal-action'>
+            <button onClick={() => handleUncompleteTask(task.id)} className='btn' data-testid='delete-todo-unconfirm'>
               Yes
             </button>
           </div>
