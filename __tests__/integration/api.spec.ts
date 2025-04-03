@@ -110,10 +110,7 @@ test('delete a TODO', async () => {
 
 
 test('edit a TODO', async () => {
-  await completeTodo({
-    id: "3",
-    done: true
-  });
+  await completeTodo("3");
   const actual = await getAllTodos();
 
   expect(actual).toEqual([

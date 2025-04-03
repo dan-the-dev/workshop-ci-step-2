@@ -41,13 +41,15 @@ export const deleteTodo = async (id: string): Promise<void> => {
   })
 }
 
-export const completeTodo = async (todo: Pick<ITask, 'id' | 'done'>): Promise<ITask> => {
-  const res = await fetch(`${baseUrl}/tasks/${todo.id}`, {
+export const completeTodo = async (id: string): Promise<ITask> => {
+  const res = await fetch(`${baseUrl}/tasks/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(todo)
+    body: JSON.stringify({
+      done: true
+    })
   })
   const updatedTodo = await res.json();
   return updatedTodo;
