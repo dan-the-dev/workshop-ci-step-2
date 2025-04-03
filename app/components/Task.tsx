@@ -64,7 +64,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
             Are you sure you want to complete this task?
           </h3>
           <div className='modal-action'>
-            <button onClick={() => handleCompleteTask(task.id)} className='btn' data-testid='delete-todo-confirm'>
+            <button onClick={() => handleCompleteTask(task.id)} className='btn' data-testid='complete-todo-confirm'>
               Yes
             </button>
           </div>
@@ -108,14 +108,14 @@ const Task: React.FC<TaskProps> = ({ task }) => {
           cursor='pointer'
           className='text-green-500'
           size={25}
-          data-testid="complete-todo"
+          data-testid="uncomplete-todo"
         />
         <Modal modalOpen={openModalUncomplete} setModalOpen={setOpenModalUncomplete}>
           <h3 className='text-lg'>
             Are you sure you want to restore this task?
           </h3>
           <div className='modal-action'>
-            <button onClick={() => handleUncompleteTask(task.id)} className='btn' data-testid='delete-todo-unconfirm'>
+            <button onClick={() => handleUncompleteTask(task.id)} className='btn' data-testid='uncomplete-todo-confirm'>
               Yes
             </button>
           </div>
